@@ -24,7 +24,7 @@ import Category from '../models/category.model.js'
 						error: 'Category not found',
 					});
 				}
-				req.profile = category; 
+				req.category = category; 
 				next();
 			} catch (err) {
 				return res.status(400).json({ 
@@ -33,7 +33,7 @@ import Category from '../models/category.model.js'
 			}
 		}
 			const read = (req, res) => {
-					return res.json(req.profile); 
+					return res.json(req.category); 
 			};
 
 		const list = async (req, res) => { 
@@ -50,7 +50,7 @@ import Category from '../models/category.model.js'
 		const update = async (req, res) => { 
 			try {
 				let category = req.category;
-				category = Object.assign(category, req.body); 
+				category = extend(category, req.body); 
 				category.updated = Date.now(); 
 				await category.save();
 				res.json(category); 

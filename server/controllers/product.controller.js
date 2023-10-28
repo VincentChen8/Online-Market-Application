@@ -24,7 +24,7 @@ import Product from '../models/product.model.js'
 						error: 'Product not found',
 					});
 				}
-				req.profile = product; 
+				req.product = product; 
 				next();
 			} catch (err) {
 				return res.status(400).json({ 
@@ -33,7 +33,7 @@ import Product from '../models/product.model.js'
 			}
 		}
 			const read = (req, res) => {
-					return res.json(req.profile); 
+					return res.json(req.product); 
 			};
 
 		const list = async (req, res) => { 
@@ -50,13 +50,13 @@ import Product from '../models/product.model.js'
 		const update = async (req, res) => { 
 			try {
 				let product = req.product;
-				product = Object.assign(product, req.body); 
-				product.updated = Date.now(); 
-				await product.save();
+				product = extend(product, req.body) 
+				product.updated = Date.now() 
+				await product.save()
 				res.json(product); 
 			} catch (err) {
 				return res.status(400).json({
-					error: errorHandler.getErrorMessage(err), 
+					error: errorHandler.getErrorMessage(err),
 				});
 			} 
 		};
@@ -64,7 +64,7 @@ import Product from '../models/product.model.js'
 		const remove = async (req, res) => { 
 			try {
 				let product = req.product;
-				await product.deleteOne(); 
+				await product.deleteOne() 
 				res.json({ message: 'Product removed' }); 
 			} catch (err) {
 				return res.status(400).json({
@@ -75,9 +75,8 @@ import Product from '../models/product.model.js'
 
 		const removeAll = async (req, res) => { 
 			try {
-				let product = req.product;
-				await product.deleteAll(); 
-				res.json({ message: 'All products removed' }); 
+				let product = await Product.deleteMany();
+				res.json(product); 
 			} catch (err) {
 				return res.status(400).json({
 					error: errorHandler.getErrorMessage(err) 
