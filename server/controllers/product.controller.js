@@ -65,9 +65,23 @@ import Product from '../models/product.model.js'
 			try {
 				let product = req.product;
 				await product.deleteOne(); 
-				res.json({ message: 'product removed' }); 
+				res.json({ message: 'Product removed' }); 
 			} catch (err) {
-				return res.status(400).json({error: errorHandler.getErrorMessage(err) });
+				return res.status(400).json({
+					error: errorHandler.getErrorMessage(err) 
+				});
+			} 
+		};
+
+		const removeAll = async (req, res) => { 
+			try {
+				let product = req.product;
+				await product.deleteAll(); 
+				res.json({ message: 'All products removed' }); 
+			} catch (err) {
+				return res.status(400).json({
+					error: errorHandler.getErrorMessage(err) 
+				});
 			} 
 		};
 	
@@ -77,8 +91,10 @@ import Product from '../models/product.model.js'
 				const product = await Product.find({name:{$regex: searchWord, $options: "i"},});
 				return res.status(200).json(product);
 			}catch(err){
-				return res.status(500).json({error:"Error finding product"});
+				return res.status(500).json({
+					error:"Error finding product"
+				});
 			}
 		};
 
-		export default { create, productByID, read, list, remove, update, findProduct }
+		export default { create, productByID, read, list, update, remove, removeAll, findProduct }
